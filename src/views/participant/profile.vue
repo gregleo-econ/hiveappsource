@@ -16,7 +16,7 @@ const formKey = ref(0)
 const myProfile = ref({})
   
 axios
-    .get("http://127.0.0.1:9985/api/subject/get_profile?my_email=" + store.state.user.email)
+    .get("http://econhive.com/api/subject/get_profile?my_email=" + store.state.user.email)
     .then(res => {
       myProfile.value = res.data[0];
       console.log(myProfile.value)

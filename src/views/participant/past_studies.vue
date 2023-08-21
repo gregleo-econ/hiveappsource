@@ -159,7 +159,7 @@ const showLoading = ref(true)
 
 axios
     .get(
-        'http://127.0.0.1:9985/api/subject/get_history?my_email=' +
+        'http://econhive.com/api/subject/get_history?my_email=' +
         store.state.user.email,
     )
     .then((res) => {
@@ -167,7 +167,7 @@ axios
 
         axios
             .get(
-                'http://127.0.0.1:9985/api/subject/get_history_summary?my_email=' +
+                'http://econhive.com/api/subject/get_history_summary?my_email=' +
                 store.state.user.email,
             )
             .then((res) => {
@@ -190,7 +190,7 @@ const info_experiment = function (item) {
     console.log(item)
     axios
         .get(
-            'http://127.0.0.1:9985/api/subject/get_experiment_info?my_experiment_id=' +
+            'http://econhive.com/api/subject/get_experiment_info?my_experiment_id=' +
             item.experiment_id,
         )
         .then((res) => {

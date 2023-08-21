@@ -210,7 +210,7 @@ const handleSubmit = function (event) {
         event.preventDefault()
         event.stopPropagation()
         axios
-            .post('http://127.0.0.1:9985/api/subject/submit_profile', profile.value)
+            .post('http://econhive.com/api/subject/submit_profile', profile.value)
             .then(res => {
                 updatedNotification.value = true
                 store.commit('role', 'participant')
@@ -222,7 +222,7 @@ const handleSubmit = function (event) {
 // const submit_profile = function (profile) {
 
 //     axios
-//         .post('http://127.0.0.1:9985/api/subject/submit_profile?profile_json=' + JSON.stringify(profile))
+//         .post('http://econhive.com/api/subject/submit_profile?profile_json=' + JSON.stringify(profile))
 //         .then(res => {
 
 //             updatedNotification.value = true

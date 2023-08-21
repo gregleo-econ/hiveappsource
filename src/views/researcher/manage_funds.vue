@@ -112,11 +112,11 @@ loadScript({ "client-id": CLIENT_ID }).then((paypal) => {
                 console.log(details)
                 alert('Transaction completed for $' + details.purchase_units[0].amount.value)
                 axios
-                    .post('http://127.0.0.1:9985/api/researcher/new_payment?researcher_email=' + store.state.user.email + '&amount=' + details.purchase_units[0].amount.value + '&source=paypal')
+                    .post('http://econhive.com/api/researcher/new_payment?researcher_email=' + store.state.user.email + '&amount=' + details.purchase_units[0].amount.value + '&source=paypal')
                     .then(res => {
                         axios
                             .get(
-                                'http://127.0.0.1:9985/api/users/get_funds?my_email=' +
+                                'http://econhive.com/api/users/get_funds?my_email=' +
                                 store.state.user.email,
                             )
                             .then((res) => {
@@ -124,7 +124,7 @@ loadScript({ "client-id": CLIENT_ID }).then((paypal) => {
                             });
                         axios
                             .get(
-                                'http://127.0.0.1:9985/api/users/get_funds_detail?my_email=' +
+                                'http://econhive.com/api/users/get_funds_detail?my_email=' +
                                 store.state.user.email,
                             )
                             .then((res) => {
@@ -141,7 +141,7 @@ loadScript({ "client-id": CLIENT_ID }).then((paypal) => {
 
 axios
     .get(
-        'http://127.0.0.1:9985/api/users/get_funds?my_email=' +
+        'http://econhive.com/api/users/get_funds?my_email=' +
         store.state.user.email,
     )
     .then((res) => {
@@ -160,7 +160,7 @@ const format_date = function (date_string) {
 
 axios
     .get(
-        'http://127.0.0.1:9985/api/users/get_funds_detail?my_email=' +
+        'http://econhive.com/api/users/get_funds_detail?my_email=' +
         store.state.user.email,
     )
     .then((res) => {

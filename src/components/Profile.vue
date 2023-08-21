@@ -379,14 +379,14 @@ const update_profile = function (profile) {
 
         if (props.new == false) {
             axios
-                .post('http://127.0.0.1:9985/api/subject/update_profile', profile)
+                .post('http://econhive.com/api/subject/update_profile', profile)
                 .then(res => {
                     updatedNotification.value = true
                 })
         }
         else {
             axios
-                .post('http://127.0.0.1:9985/api/subject/submit_profile', profile)
+                .post('http://econhive.com/api/subject/submit_profile', profile)
                 .then(res => {
                     updatedNotification.value = true
                     store.commit('role', 'participant')

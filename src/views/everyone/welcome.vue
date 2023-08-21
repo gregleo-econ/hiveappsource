@@ -17,7 +17,7 @@
                 </CCol>
 
 
-<h2 style="color:white">Researcher Benefits</h2>
+<h2 style="color:white">Researcher Benefits 2</h2>
                 <CRow :md="{ cols: 1, gutter: 6 }" :lg="{ cols: 3 }" style="margin-top: 10px; margin-bottom:20px;">
 
                     <CCol xs v-for="feature in researcherFeatures" :key="feature.title" style="margin-bottom:10px;">

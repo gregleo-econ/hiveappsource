@@ -337,7 +337,7 @@
                                     <br />
                                     <br />
                                     <pre
-                                        style="white-space:pre-line;">curl -X POST "http://127.0.0.1:9985/api/experiment/finish_experiment?my_participant_id=[[ENTER PARTICIPANT ID HERE]]&study_id={{ info.id }}&payment=[ENTER PAYMENT HERE]" -H "accept: */*" -d ""</pre>
+                                        style="white-space:pre-line;">curl -X POST "http://econhive.com/api/experiment/finish_experiment?my_participant_id=[[ENTER PARTICIPANT ID HERE]]&study_id={{ info.id }}&payment=[ENTER PAYMENT HERE]" -H "accept: */*" -d ""</pre>
                                 </CCardText>
                             </CCardBody>
                         </CCard>
@@ -584,13 +584,13 @@ if (uploadErrorList.value.length > 0) {
 }
 if (uploadErrorList.value.length == 0) {
 
-axios.post("http://127.0.0.1:9985/api/researcher/upload_data?study_id=" + info.value.id + "&comment=" + comment.value, formData)
+axios.post("http://econhive.com/api/researcher/upload_data?study_id=" + info.value.id + "&comment=" + comment.value, formData)
 .then(res => {
        comment.value = ""
        fileInputKey.value += 1
        showUploadConfirm.value = true 
        axios
-            .get("http://127.0.0.1:9985/api/researcher/get_data_for_study?study_id=" + info.value.id)
+            .get("http://econhive.com/api/researcher/get_data_for_study?study_id=" + info.value.id)
             .then(res => {
                 data.value = res.data;
                 fileTableKey.value += 1
@@ -622,11 +622,11 @@ const info_experiment = function (item) {
 show_edit.value = false;
 info.value = item;
 axios
-    .get("http://127.0.0.1:9985/api/researcher/get_touches_for_study?study_id=" + item.id)
+    .get("http://econhive.com/api/researcher/get_touches_for_study?study_id=" + item.id)
     .then(res => {
         touches.value = res.data;
         axios
-            .get("http://127.0.0.1:9985/api/researcher/get_data_for_study?study_id=" + item.id)
+            .get("http://econhive.com/api/researcher/get_data_for_study?study_id=" + item.id)
             .then(res => {
                 data.value = res.data;
                 show_detail.value = true;
@@ -649,7 +649,7 @@ tabPaneActiveKey.value = 4;
 
 const update_study_table = function () {
 axios
-    .get("http://127.0.0.1:9985/api/researcher/get_history_researcher",
+    .get("http://econhive.com/api/researcher/get_history_researcher",
 {   
       headers: {
               jwt: store.state.user.jwt
@@ -678,7 +678,7 @@ axios
 const download_file = function (study_id, version) {
 
 axios
-    .get("http://127.0.0.1:9985/api/researcher/download_data?study_id=" + study_id + "&version=" + version)
+    .get("http://econhive.com/api/researcher/download_data?study_id=" + study_id + "&version=" + version)
     .then(res => {
         var fileURL = window.URL.createObjectURL(new Blob([res.data]));
         var fileLink = document.createElement('a');
@@ -695,7 +695,7 @@ axios
 const update_info_experiment = function (item) {
 info.value = item;
 axios
-    .get("http://127.0.0.1:9985/api/researcher/get_touches_for_study?study_id=" + item.id)
+    .get("http://econhive.com/api/researcher/get_touches_for_study?study_id=" + item.id)
     .then(res => {
         touches.value = res.data;
     });
@@ -711,7 +711,7 @@ if (neededFunds.value >= balance.value + 0.01 && status == "running") {
 }
 else {
     axios
-        .post("http://127.0.0.1:9985/api/researcher/change_experiment_status?experiment_id=" + study.id + "&status=" + status)
+        .post("http://econhive.com/api/researcher/change_experiment_status?experiment_id=" + study.id + "&status=" + status)
         .then(res => {
             update_study_table()
         });
@@ -724,7 +724,7 @@ const confirm_subject = async function (study, participant) {
 balance.value = await checkBalance()
 if (participant.participation_fee + participant.payment <= balance.value) {
     axios
-        .post("http://127.0.0.1:9985/api/researcher/confirm_participant?experiment_id=" + study.id + "&participant_id=" + participant.participant_number)
+        .post("http://econhive.com/api/researcher/confirm_participant?experiment_id=" + study.id + "&participant_id=" + participant.participant_number)
         .then(res => {
             update_info_experiment(study)
         });
@@ -771,7 +771,7 @@ for (let i = 0; i < participants.length; i++) {
 }
 if (cost <= balance.value) {
     axios
-        .post("http://127.0.0.1:9985/api/researcher/confirm_all?my_experiment_id=" + study.id)
+        .post("http://econhive.com/api/researcher/confirm_all?my_experiment_id=" + study.id)
         .then(res => {
             update_info_experiment(study)
         });
@@ -786,7 +786,7 @@ else {
 const manual_input = function () {
 
 axios
-    .post("http://127.0.0.1:9985/api/researcher/manually_confirm", { experiment_id: info.value.id, csv: csvInput.value })
+    .post("http://econhive.com/api/researcher/manually_confirm", { experiment_id: info.value.id, csv: csvInput.value })
     .then(res => {
         update_info_experiment(info.value)
     });
@@ -796,7 +796,7 @@ axios
 const reject_subject = function (study, participant) {
 
 axios
-    .post("http://127.0.0.1:9985/api/researcher/reject_participant?experiment_id=" + study.id + "&participant_id=" + participant.participant_number)
+    .post("http://econhive.com/api/researcher/reject_participant?experiment_id=" + study.id + "&participant_id=" + participant.participant_number)
     .then(res => {
         update_info_experiment(study)
     });
@@ -805,7 +805,7 @@ axios
 
 axios
 .get(
-    'http://127.0.0.1:9985/api/users/get_funds?my_email=' +
+    'http://econhive.com/api/users/get_funds?my_email=' +
     store.state.user.email,
 )
 .then((res) => {
@@ -821,7 +821,7 @@ const checkBalance = async function (filter) {
 return new Promise((balance) => {
     axios
         .get(
-            'http://127.0.0.1:9985/api/users/get_funds?my_email=' +
+            'http://econhive.com/api/users/get_funds?my_email=' +
             store.state.user.email,
         )
         .then(res => {
@@ -847,7 +847,7 @@ neededFunds.value = 0
 csvInput.value = ""
 
 axios
-    .get("http://127.0.0.1:9985/api/researcher/get_history_researcher",
+    .get("http://econhive.com/api/researcher/get_history_researcher",
 {   
       headers: {
               jwt: store.state.user.jwt

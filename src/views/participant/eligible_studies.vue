@@ -67,7 +67,7 @@ const showLoading = ref(true)
 
 
 axios
-    .get('http://127.0.0.1:9985/api/subject/get_experiment_info_for_eligible_sessions?my_email=' + store.state.user.email)
+    .get('http://econhive.com/api/subject/get_experiment_info_for_eligible_sessions?my_email=' + store.state.user.email)
     .then(res => {
         items.value = res.data;
         showLoading.value = false
@@ -76,11 +76,11 @@ axios
 
 const start_experiment = function (item) {
     axios
-        .post('http://127.0.0.1:9985/api/subject/start_experiment?my_experiment_id=' + item.id + '&my_email=' + store.state.user.email),
+        .post('http://econhive.com/api/subject/start_experiment?my_experiment_id=' + item.id + '&my_email=' + store.state.user.email),
         window.open(item.study_url);
 
     axios
-        .get('http://127.0.0.1:9985/api/subject/get_experiment_info_for_eligible_sessions?my_email=' + store.state.user.email)
+        .get('http://econhive.com/api/subject/get_experiment_info_for_eligible_sessions?my_email=' + store.state.user.email)
         .then(res => {
             items.value = res.data;
         })
