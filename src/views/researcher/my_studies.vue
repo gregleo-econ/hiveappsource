@@ -337,7 +337,7 @@
                                         <br />
                                         <br />
                                         <pre
-                                            style="white-space:pre-line;">curl -X POST "http://127.0.0.1:9985/experiment/finish_experiment?my_participant_id=[[ENTER PARTICIPANT ID HERE]]&study_id={{ info.id }}&payment=[ENTER PAYMENT HERE]" -H "accept: */*" -d ""</pre>
+                                            style="white-space:pre-line;">curl -X POST "http://127.0.0.1:9985/api/experiment/finish_experiment?my_participant_id=[[ENTER PARTICIPANT ID HERE]]&study_id={{ info.id }}&payment=[ENTER PAYMENT HERE]" -H "accept: */*" -d ""</pre>
                                     </CCardText>
                                 </CCardBody>
                             </CCard>
@@ -584,13 +584,13 @@ const uploadData = function () {
     }
     if (uploadErrorList.value.length == 0) {
 
-        axios.post("http://127.0.0.1:9985/researcher/upload_data?study_id=" + info.value.id + "&comment=" + comment.value, formData)
+        axios.post("http://127.0.0.1:9985/api/researcher/upload_data?study_id=" + info.value.id + "&comment=" + comment.value, formData)
             .then(res => {
                 comment.value = ""
                 fileInputKey.value += 1
                 showUploadConfirm.value = true
                 axios
-                    .get("http://127.0.0.1:9985/researcher/get_data_for_study?study_id=" + info.value.id)
+                    .get("http://127.0.0.1:9985/api/researcher/get_data_for_study?study_id=" + info.value.id)
                     .then(res => {
                         data.value = res.data;
                         fileTableKey.value += 1
@@ -622,11 +622,11 @@ const info_experiment = function (item) {
     show_edit.value = false;
     info.value = item;
     axios
-        .get("http://127.0.0.1:9985/researcher/get_touches_for_study?study_id=" + item.id)
+        .get("http://127.0.0.1:9985/api/researcher/get_touches_for_study?study_id=" + item.id)
         .then(res => {
             touches.value = res.data;
             axios
-                .get("http://127.0.0.1:9985/researcher/get_data_for_study?study_id=" + item.id)
+                .get("http://127.0.0.1:9985/api/researcher/get_data_for_study?study_id=" + item.id)
                 .then(res => {
                     data.value = res.data;
                     show_detail.value = true;
@@ -651,7 +651,7 @@ const update_study_table = function () {
 
 
     axios
-        .post("http://127.0.0.1:9985/researcher/get_history_researcher", {
+        .post("http://127.0.0.1:9985/api/researcher/get_history_researcher", {
 
                 jwt:store.state.user.jwt,
             my_email:store.state.user.email
@@ -678,7 +678,7 @@ const update_study_table = function () {
 const download_file = function (study_id, version) {
 
     axios
-        .get("http://127.0.0.1:9985/researcher/download_data?study_id=" + study_id + "&version=" + version)
+        .get("http://127.0.0.1:9985/api/researcher/download_data?study_id=" + study_id + "&version=" + version)
         .then(res => {
             var fileURL = window.URL.createObjectURL(new Blob([res.data]));
             var fileLink = document.createElement('a');
@@ -695,7 +695,7 @@ const download_file = function (study_id, version) {
 const update_info_experiment = function (item) {
     info.value = item;
     axios
-        .get("http://127.0.0.1:9985/researcher/get_touches_for_study?study_id=" + item.id)
+        .get("http://127.0.0.1:9985/api/researcher/get_touches_for_study?study_id=" + item.id)
         .then(res => {
             touches.value = res.data;
         });
@@ -711,7 +711,7 @@ const change_experiment_status = async function (study, status) {
     }
     else {
         axios
-            .post("http://127.0.0.1:9985/researcher/change_experiment_status?experiment_id=" + study.id + "&status=" + status)
+            .post("http://127.0.0.1:9985/api/researcher/change_experiment_status?experiment_id=" + study.id + "&status=" + status)
             .then(res => {
                 update_study_table()
             });
@@ -724,7 +724,7 @@ const confirm_subject = async function (study, participant) {
     balance.value = await checkBalance()
     if (participant.participation_fee + participant.payment <= balance.value) {
         axios
-            .post("http://127.0.0.1:9985/researcher/confirm_participant?experiment_id=" + study.id + "&participant_id=" + participant.participant_number)
+            .post("http://127.0.0.1:9985/api/researcher/confirm_participant?experiment_id=" + study.id + "&participant_id=" + participant.participant_number)
             .then(res => {
                 update_info_experiment(study)
             });
@@ -771,7 +771,7 @@ const confirm_all = async function (study, participants) {
     }
     if (cost <= balance.value) {
         axios
-            .post("http://127.0.0.1:9985/researcher/confirm_all?my_experiment_id=" + study.id)
+            .post("http://127.0.0.1:9985/api/researcher/confirm_all?my_experiment_id=" + study.id)
             .then(res => {
                 update_info_experiment(study)
             });
@@ -786,7 +786,7 @@ const confirm_all = async function (study, participants) {
 const manual_input = function () {
 
     axios
-        .post("http://127.0.0.1:9985/researcher/manually_confirm", { experiment_id: info.value.id, csv: csvInput.value })
+        .post("http://127.0.0.1:9985/api/researcher/manually_confirm", { experiment_id: info.value.id, csv: csvInput.value })
         .then(res => {
             update_info_experiment(info.value)
         });
@@ -796,7 +796,7 @@ const manual_input = function () {
 const reject_subject = function (study, participant) {
 
     axios
-        .post("http://127.0.0.1:9985/researcher/reject_participant?experiment_id=" + study.id + "&participant_id=" + participant.participant_number)
+        .post("http://127.0.0.1:9985/api/researcher/reject_participant?experiment_id=" + study.id + "&participant_id=" + participant.participant_number)
         .then(res => {
             update_info_experiment(study)
         });
@@ -805,7 +805,7 @@ const reject_subject = function (study, participant) {
 
 axios
     .get(
-        'http://127.0.0.1:9985/users/get_funds?my_email=' +
+        'http://127.0.0.1:9985/api/users/get_funds?my_email=' +
         store.state.user.email,
     )
     .then((res) => {
@@ -821,7 +821,7 @@ const checkBalance = async function (filter) {
     return new Promise((balance) => {
         axios
             .get(
-                'http://127.0.0.1:9985/users/get_funds?my_email=' +
+                'http://127.0.0.1:9985/api/users/get_funds?my_email=' +
                 store.state.user.email,
             )
             .then(res => {
@@ -847,7 +847,7 @@ const resetPage = function () {
     csvInput.value = ""
 
     axios
-        .get("http://127.0.0.1:9985/researcher/get_history_researcher",
+        .get("http://127.0.0.1:9985/api/researcher/get_history_researcher",
             {
                 headers: {
                     jwt: store.state.user.jwt
@@ -869,7 +869,7 @@ const checkUploadErrors = function () {
 
 console.log(store.state.user.jwt)
 // axios
-//     .post("http://127.0.0.1:9985/researcher/auth_test", {
+//     .post("http://127.0.0.1:9985/api/researcher/auth_test", {
 
 //         headers: {
 //             jwt: store.state.user.jwt

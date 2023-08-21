@@ -111,7 +111,7 @@ project.value = props.projectData
 
 
 axios
-    .get('http://127.0.0.1:9985/researcher/get_experiment_list')
+    .get('http://127.0.0.1:9985/api/researcher/get_experiment_list')
     .then(res => {
 
         experimentList.value = res.data
@@ -126,7 +126,7 @@ axios
 
 
 axios
-    .get('http://127.0.0.1:9985/researcher/get_researcher_list')
+    .get('http://127.0.0.1:9985/api/researcher/get_researcher_list')
     .then(res => {
 
         researcherList.value = res.data
@@ -171,7 +171,7 @@ const select2Settings = {
 
 const getValues = function (variable) {
     axios
-        .get('http://127.0.0.1:9985/researcher/get_values', { params: { variable: variable } })
+        .get('http://127.0.0.1:9985/api/researcher/get_values', { params: { variable: variable } })
         .then(res => {
             variableOptions[variable] = res.data
             return (res.data)
@@ -207,7 +207,7 @@ const submit_project = function () {
         }
 
         axios
-            .post('http://127.0.0.1:9985/researcher/new_project', projectDataForSubmit)
+            .post('http://127.0.0.1:9985/api/researcher/new_project', projectDataForSubmit)
             .then(res => {
                 router.push('/researcher/my_projects')
 
@@ -252,7 +252,7 @@ const edit_project = async function () {
         }
         console.log(studyData)
         axios
-            .post('http://127.0.0.1:9985/researcher/edit_experiment', studyData)
+            .post('http://127.0.0.1:9985/api/researcher/edit_experiment', studyData)
             .then(res => {
                 emit('editSubmit')
 
