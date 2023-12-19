@@ -1,132 +1,49 @@
 <template>
     <div class="splash-page">
         <div class="splash-content">
-            <h1 class="logo-heading">
-
-            </h1>
-            <CRow>
-                <CCol sm="4">
-                    <img :src="logoSrc" alt="Hive Logo" class="logo" style="filter: invert(1)" />
-                </CCol>
-                <CCol style="color:whtie; display: flex; justify-content: center; align-items: center; " sm="8" >
-                    <div style="font-size:24px; font-style:italic; margin: 10px; color:white;">Highly Integrated Virtual Environment for Experimental Social Science</div>
-
-                    <!-- <p style="color:white; margin-top:30px"><i>{{ appDescription }}</i></p> -->
-
-
-                </CCol>
-
-
-<h2 style="color:white">Researcher Benefits 2</h2>
-                <CRow :md="{ cols: 1, gutter: 6 }" :lg="{ cols: 3 }" style="margin-top: 10px; margin-bottom:20px;">
-
-                    <CCol xs v-for="feature in researcherFeatures" :key="feature.title" style="margin-bottom:10px;">
-                        <CCard color="dark" text-color="white" style="height:100%; margin-bottom: 10px;">
-                            <CCardBody>
-                                <CCardTitle>{{ feature.title }}</CCardTitle>
-                                <CCardText>{{ feature.description }}</CCardText>
-                            </CCardBody>
-                        </CCard>
-                    </CCol>
-                </CRow>
-
-
-                <h2 style="color:white">Participant Benefits</h2>
-                <CRow :md="{ cols: 1, gutter: 6 }" :lg="{ cols: 3 }" style="margin-top: 10px;">
-
-                    <CCol xs v-for="feature in participantFeatures" :key="feature.title" style="margin-bottom:10px;">
-                        <CCard color="white" text-color="dark" style="height:100%; margin-bottom: 10px;">
-                            <CCardBody>
-                                <CCardTitle>{{ feature.title }}</CCardTitle>
-                                <CCardText>{{ feature.description }}</CCardText>
-                            </CCardBody>
-                        </CCard>
-                    </CCol>
-                </CRow>
-
-
-
-            </CRow>
-
-
-            
+            <CCard color="primary" style="width:500px">
+                <CCardBody>
+                    <CCardTitle>
+                        <h1 style="color:black">Welcome To:</h1>
+                    </CCardTitle>
+                    <img src='@/assets/brand/hive_logo_white_fill.svg' alt="Hive Logo" class="logo" style="width:250px" />
+                    <template v-if="!store.state.user.auth">
+                        <br />
+                        <br />
+                        <CCardFooter>
+                            <CCol>
+                                <SignupButton variant="outline"
+                                    style="width:100px; font-size:20px; color:black; margin:10px; background-color:white; border: 2px solid black;" />
+                                <LoginButton variant="outline"
+                                    style="width:100px; font-size:20px; color:black; margin:10px; background-color:white; border: 2px solid black;" />
+                            </CCol>
+                        </CCardFooter>
+                    </template>
+                    <template v-if="store.state.user.auth">
+                        <br />
+                        <br />
+                        <CCardFooter>
+                            <CCardText>
+                                <h5>Logged in as {{ store.state.user.email }}</h5>
+                            </CCardText>
+                            <CAvatar :src='store.state.user.picture' size="xl" />
+                            <LogoutButton variant="outline"
+                                style="width:100px; font-size:20px; color:black; margin:10px; background-color:white; border: 2px solid black;" />
+                        </CCardFooter>
+                    </template>
+                </CCardBody>
+            </CCard>
         </div>
     </div>
 </template>
-  
-<script>
-import { CCardImage, CCardText } from '@coreui/vue';
+<script setup>
+import LoginButton from "@/components/auth/LoginButton.vue";
+import LogoutButton from "@/components/auth/LogoutButton.vue";
+import SignupButton from "@/components/auth/SignupButton.vue";
+import { CCardTitle } from "@coreui/vue";
+import { useStore } from "vuex";
+const store = useStore();
 
-export default {
-    name: 'SplashPage',
-    data() {
-        return {
-            appDescription: "HIVE offers an integrated and secure space for online experimental social science research. For researchers, Hive provides an innovative environment to create, extend, and manage research studies, with access to a diverse pool of participants. Participants can earn money while contributing to meaningful scientific studies while maintaining their privacy. Join Hive to be part of the future of collaborative social science research and make a real research impact.",
-            researcherFeatures: [
-                {
-                    title: "Quick Launch",
-                    description: "Quickly create and launch research studies."
-                },
-                {
-                    title: "Student Participants",
-                    description: "Access to thousands of student participants."
-                },
-                {
-                    title: "Minimal Fees",
-                    description: "Zero or minimal fees for eligible academic research studies."
-                },
-                {
-                    title: "No Deception",
-                    description: "Deception is never allowed on HIVE."
-                },
-                {
-                    title: "Participant Data",
-                    description: "Access basic participant data on demographics and standard preference batteries."
-                },
-                {
-                    title: "Extend Studies",
-                    description: "Extend previous studies using individually-linkable data."
-                },
-                {
-                    title: "Automatic Payments",
-                    description: "Automatically and easily assign participant payments."
-                },
-                {
-                    title: "Secure Payments",
-                    description: "Pay participants automatically and securely."
-                },
-            ],
-            participantFeatures: [
-                {
-                    title: "Earn Money",
-                    description: "Earn money participating in online research studies."
-                },
-                {
-                    title: "Instant Payout",
-                    description: "Funds Transfered via Paypal, Zelle, or Venmo after study completion."
-                },
-                {
-                    title: "Privacy",
-                    description: "Your name and identity are never revealed to researchers."
-                },
-                {
-                    title: "Engaging",
-                    description: "Intersting and engaging research studies run by professional academics."
-                },
-                {
-                    title: "Safe",
-                    description: "All studies are reviewed by relevant institutional review boards."
-                },
-                {
-                    title: "Contribute",
-                    description: "Contribute to science."
-                },
-            ],
-            logoSrc: require('@/assets/brand/hive_logo.svg'),
-        };
-    },
-    components: { CCardText, CCardImage }
-}
 </script>
   
 <style scoped>
@@ -138,7 +55,7 @@ export default {
 
 .logo {
     width: 100%;
-    max-width: 300px;
+    max-width: 400px;
     height: auto;
 }
 
@@ -149,6 +66,8 @@ export default {
 .splash-content {
     text-align: center;
     padding: 20px;
+    width: 100%;
+    display: contents
 }
 
 .description {
@@ -210,6 +129,5 @@ export default {
 
 .cta-button:hover {
     background-color: #003a80;
-}
-</style>
+}</style>
   

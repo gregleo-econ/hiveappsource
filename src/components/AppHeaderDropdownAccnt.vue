@@ -41,11 +41,7 @@
     </CDropdownMenu>
   </CDropdown>
 </template>
-
-
-
 <script>
-
 export default {
     name: "AppHeaderDropdownAccnt",
     setup() {

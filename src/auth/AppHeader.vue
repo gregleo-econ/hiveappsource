@@ -66,9 +66,9 @@
 </template>
 
 <script setup>
-import LoginButton from "@/components/login-button.vue";
-import LogoutButton from "@/components/logout-button.vue";
-import SignupButton from "@/components/signup-button.vue";
+import LoginButton from "@/components/auth/LoginButton.vue";
+import LogoutButton from "@/components/auth/LogoutButton.vue";
+import SignupButton from "@/components/auth/SignupButton.vue";
 
 import AppBreadcrumb from './AppBreadcrumb'
 import AppHeaderDropdownAccnt from './AppHeaderDropdownAccnt'

@@ -22,7 +22,6 @@
     </CContainer>
   </div>
 </template>
-
 <script>
 export default {
   name: 'Page500',

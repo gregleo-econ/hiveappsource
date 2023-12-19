@@ -4,18 +4,12 @@
         <h1 class="blinking" color="primary" style="color:white">Loading</h1>
     </div>
 </template>
-
 <style>
-
 .blinking {
   animation: blink 1s 5 alternate;
 }
-
 @keyframes blink {
   from {   opacity: 1; }
   to { opacity: 0.25; }
 }
-
-
-
 </style>

@@ -1,9 +1,7 @@
 import { h, resolveComponent } from 'vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout'
-
-
-
+import store from '@/store/index.js';
 const routes = [
   {
     path: '/',
@@ -24,23 +22,23 @@ const routes = [
       {
         path: '/participant',
         name: 'Participant',
-        redirect: '/participant/eligible_studies',
+        redirect: '/participant/eligible_sessions',
         meta:      {
           requiresAuth: true,
         },
       },
       {
-        path: '/participant/eligible_studies',
-        name: 'Eligible Studies',
-        component: () => import('@/views/participant/eligible_studies.vue'),
+        path: '/participant/eligible_sessions',
+        name: 'Eligible Sessions',
+        component: () => import('@/views/participant/eligible_sessions.vue'),
         meta:      {
           requiresAuth: true,
         },
       },
       {
-        path: '/participant/past_studies',
-        name: 'Past Studies',
-        component: () => import('@/views/participant/past_studies.vue'),
+        path: '/participant/past_sessions',
+        name: 'Past Sessions',
+        component: () => import('@/views/participant/past_sessions.vue'),
         meta:      {
           requiresAuth: true,
         },
@@ -54,9 +52,25 @@ const routes = [
         },
       },
       {
-        path: '/researcher/my_studies',
-        name: 'My Studies',
-        component: () => import('@/views/researcher/my_studies.vue'),
+        path: '/community/projects',
+        name: 'Project Database',
+        component: () => import('@/views/community/projects.vue'),
+        meta:      {
+          requiresAuth: false,
+        },
+      },
+      {
+        path: '/researcher/profile',
+        name: 'Researcher Profile',
+        component: () => import('@/views/researcher/profile.vue'),
+        meta:      {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: '/researcher/my_sessions',
+        name: 'My Sessions',
+        component: () => import('@/views/researcher/my_sessions.vue'),
         meta:      {
           requiresAuth: true,
         },
@@ -70,9 +84,17 @@ const routes = [
         },
       },
       {
-        path: '/researcher/new_study',
-        name: 'New Study',
-        component: () => import('@/views/researcher/new_study.vue'),
+        path: '/researcher/my_projects',
+        name: 'My Projects',
+        component: () => import('@/views/researcher/my_projects.vue'),
+        meta:      {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: '/researcher/new_session',
+        name: 'New Session',
+        component: () => import('@/views/researcher/new_session.vue'),
         meta:      {
           requiresAuth: true,
         },
@@ -100,19 +122,29 @@ const routes = [
         meta:      {
           requiresAuth: true,
         },
+      },
+      {
+        path: '/new_user/new',
+        name: 'New User',
+        component: () => import('@/views/new_user/new.vue'),
+        meta:      {
+          requiresAuth: true,
+        },
       }
-
     ]
 }]
-
-
 const router = createRouter({
-  history: createWebHashHistory(process.env.BASE_URL),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
   scrollBehavior() {
     // always scroll to top
     return { top: 0 }
   },
 })
-
+router.afterEach(to => {
+  if(to.path != "/welcome"){
+  // store.commit('route',to.path)
+  }
+  
+})
 export default router

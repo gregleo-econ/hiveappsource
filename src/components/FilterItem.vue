@@ -2,15 +2,14 @@
     <h5>
         <CIcon icon="cilGroup" size="xl" />&nbspGroups
     </h5>
-    
+
     <CCard>
         <CCardBody>
             <CRow :xs="{ cols: 1, gutter: 6 }" :md="{ cols: 2 }">
-
                 <CCol xs v-for="(conditions, index) in filterData.filter">
                     <CCard v-if="index != filterData.activeGroup" @click="active_group(index)" text-color="dark"
                         class="mb-3 border">
-                        <CCardHeader>Group {{ index + 1 }}</CCardHeader>
+                        <CCardHeader style="font-weight:bold;">Group {{ index + 1 }}</CCardHeader>
                         <CCardBody>
                             <CCardText>
                                 Filter: {{ conditions.join(" AND ") }}
@@ -21,10 +20,9 @@
                             </CButton>
                         </CCardFooter>
                     </CCard>
-
                     <CCard v-if="index == filterData.activeGroup" color="dark" text-color="white"
                         @click="active_group(index)" class="mb-3 border">
-                        <CCardHeader>Group {{ index + 1 }} <b>(Active)</b></CCardHeader>
+                        <CCardHeader style="font-weight:bold;">Group {{ index + 1 }} <b>(Active)</b></CCardHeader>
                         <CCardBody>
                             <CCardText>
                                 Filter: {{ conditions.join(" AND ") }}
@@ -40,9 +38,10 @@
             <CButton @click="filter_add_group" color="success">Add Group</CButton>
             <CButton style="margin-left:10px;" @click="filter_remove_group(event)" color="danger">Remove Group {{
                 filterData.activeGroup + 1 }}</CButton>
-<br/>
-<br/>
-<CRow >
+
+            <hr style="color:var(--cui-dark);">
+
+            <CRow>
                 <CCol md="4">
                     <CIcon icon="cilFindInPage" size="md" />&nbspVariable
                     <Select2 v-model="filterData.variable" :settings="select2Settings.single" :options="props.variables"
@@ -68,30 +67,24 @@
                         text="" />
                 </CCol>
             </CRow>
-            <br/>
+            <br />
             <CButton @click="filter_add" color="success">Add Condition to Group {{ filterData.activeGroup + 1 }}</CButton>
-
         </CCardBody>
     </CCard>
     <br />
-
 </template>
    
 <script setup>
-
 import { CButton, CCardBody, CCardHeader, CCardTitle } from '@coreui/vue';
-import { ref } from 'vue';
-
+import { ref, toRaw } from 'vue';
 const selectedValue = ref("")
-
 const select2Settings = {
     single: {
-        allowClear: true,
+        allowClear: false,
         closeOnClear: false,
         multiple: false,
         width: '90%',
         placeholder: 'Select'
-
     },
     multiple: {
         allowClear: true,
@@ -101,7 +94,6 @@ const select2Settings = {
         placeholder: 'Select Multiple'
     },
 }
-
 const filterData = ref({
     variable: '',
     type: 'single',
@@ -112,8 +104,6 @@ const filterData = ref({
     filter: [[]],
     activeGroup: 0
 })
-
-
 const props = defineProps({
     startingFilter: Object,
     modelValue: Object,
@@ -122,11 +112,8 @@ const props = defineProps({
     variableOperators: Object,
     types: Object,
 })
-
-let emit = defineEmits(['update:modelValue','updateFilter']);
-
+let emit = defineEmits(['update:modelValue', 'updateFilter']);
 filterData.value.filter = props.startingFilter
-
 const selectVariable = function (event) {
     filterData.value.type = props.types[filterData.value.variable]
     filterData.value.options = props.variableOptions[filterData.value.variable]
@@ -135,65 +122,56 @@ const selectVariable = function (event) {
     filterData.value.selected = ""
     emit('update:modelValue', filterData.value)
 }
-
 const selectOptions = function (event) {
     emit('update:modelValue', filterData.value)
 }
-
 const selectOperator = function (event) {
     emit('update:modelValue', filterData.value)
 }
-
 const filter_add = function (event) {
     if (filterData.value.type == 'single') {
-        if(filterData.value.selected.length>0){
-        filterData.value.filter[filterData.value.activeGroup].push(filterData.value.variable + ' ' + filterData.value.operator + ' ("' + filterData.value.selected + '")')
-        emit('update:modelValue', filterData.value)
-        emit('updateFilter')
+        if (filterData.value.selected.length > 0) {
+            filterData.value.filter[filterData.value.activeGroup].push(filterData.value.variable + ' ' + filterData.value.operator + ' ("' + filterData.value.selected + '")')
+            emit('update:modelValue', filterData.value)
+            emit('updateFilter')
         }
     }
     else if (filterData.value.type == 'multi') {
-        if(filterData.value.selected.length>0){
-        let arrayOfOptions = filterData.value.selected
-        for (let i = 0; i < filterData.value.selected.length; i++) {
-            arrayOfOptions[i] = addQuotes(arrayOfOptions[i])
+        if (filterData.value.selected.length > 0) {
+            let arrayOfOptions = filterData.value.selected
+            for (let i = 0; i < filterData.value.selected.length; i++) {
+                arrayOfOptions[i] = addQuotes(arrayOfOptions[i])
+            }
+            filterData.value.filter[filterData.value.activeGroup].push(filterData.value.variable + ' ' + filterData.value.operator + ' (' + arrayOfOptions.join(",") + ')')
+            emit('update:modelValue', filterData.value)
+            emit('updateFilter')
         }
-        filterData.value.filter[filterData.value.activeGroup].push(filterData.value.variable + ' ' + filterData.value.operator + ' (' + arrayOfOptions.join(",") + ')')
-        emit('update:modelValue', filterData.value)
-        emit('updateFilter')
-    }
     }
     else if (filterData.value.type == 'date') {
-        if(filterData.value.selected.length>0){
-        filterData.value.filter[filterData.value.activeGroup].push(filterData.value.variable + ' ' + filterData.value.operator + ' ("' + filterData.value.selected + '")')
-        emit('update:modelValue', filterData.value)
-        emit('updateFilter')
+        if (filterData.value.selected.length > 0) {
+            filterData.value.filter[filterData.value.activeGroup].push(filterData.value.variable + ' ' + filterData.value.operator + ' ("' + filterData.value.selected + '")')
+            emit('update:modelValue', filterData.value)
+            emit('updateFilter')
         }
     }
     else if (filterData.value.type == 'open') {
-        if(filterData.value.selected.length>0){
-        filterData.value.filter[filterData.value.activeGroup].push(filterData.value.variable + ' ' + filterData.value.operator + ' ("%' + filterData.value.selected + '%")')
-        emit('update:modelValue', filterData.value)
-        emit('updateFilter')
+        if (filterData.value.selected.length > 0) {
+            filterData.value.filter[filterData.value.activeGroup].push(filterData.value.variable + ' ' + filterData.value.operator + ' ("%' + filterData.value.selected + '%")')
+            emit('update:modelValue', filterData.value)
+            emit('updateFilter')
         }
     }
-
 }
-
-
 const filter_remove_last = function (index) {
     filterData.value.filter[index].pop()
     emit('update:modelValue', filterData.value)
     emit('updateFilter')
 }
-
 const filter_add_group = function (event) {
     filterData.value.filter.push([])
     filterData.value.activeGroup = filterData.value.activeGroup + 1
     emit('update:modelValue', filterData.value)
-
 }
-
 const filter_remove_group = function (event) {
     filterData.value.filter.splice(filterData.value.activeGroup, 1)
     filterData.value.activeGroup = filterData.value.filter.length - 1
@@ -204,21 +182,12 @@ const filter_remove_group = function (event) {
     emit('update:modelValue', filterData.value)
     emit('updateFilter')
 }
-
 const active_group = function (index) {
     filterData.value.activeGroup = index
     emit('update:modelValue', filterData.value)
 }
-
-
 const addQuotes = function (str) {
     return `"${str}"`;
 }
-
 emit('update:modelValue', filterData.value)
-
-
-
-
 </script>
-

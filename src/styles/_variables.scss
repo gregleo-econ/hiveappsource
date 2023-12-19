@@ -1,5 +1,13 @@
 // Variable overrides
 $sidebar-bg: #323232;
+$border-width: 2px;
+$card-border-width: 2px;
+$table-border-color: black !important;
+$table-border-width: 2px;
+$table-border-radius: 10px;
+$border-radius: 10px;
+$border-color: black;
+$border-color-translucent: black;
 $header-bg: #323232;
 $footer-bg: #323232;
 $header-color: white;
@@ -17,15 +25,12 @@ $sidebar-nav-group-bg: #ffee7480;
 $sidebar-nav-group-items-padding-y: 0px;
 $sidebar-nav-group-items-padding-x: 30px;
 $sidebar-nav-group-toggle-show-color: white;
-
-
 $primary: #ffee74;
 $info: #ffe21f;
 $success: #6eba8c;
 $warning: #e85656;
 $danger: #e85656;
 $dark: #323232;
-
 $form-check-input-checked-bg-color: black;
 $form-check-input-checked-border-color: black;
 $form-check-input-focus-box-shadow: black;
@@ -35,7 +40,4 @@ $accordion-button-active-color: black;
 $btn-focus-box-shadow: black;
 $high-emphasis-inverse: #000000;
 $high-emphasis-inverse: #ffffff;
-
-
-
 $min-contrast-ratio: 8;

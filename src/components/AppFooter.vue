@@ -1,9 +1,8 @@
 <template>
 <CFooter>
-
-
+  
     <div class="ms-auto">
-
+      
       
       
       <span class="ms-1"
@@ -12,7 +11,6 @@
     </div>
   </CFooter>
 </template>
-
 <script>
 export default {
   name: 'AppFooter',

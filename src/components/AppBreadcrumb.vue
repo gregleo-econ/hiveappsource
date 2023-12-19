@@ -10,16 +10,13 @@
     </CBreadcrumbItem>
   </CBreadcrumb>
 </template>
-
 <script>
 import { onMounted, ref } from 'vue'
 import router from '@/router'
-
 export default {
   name: 'AppBreadcrumb',
   setup() {
     const breadcrumbs = ref()
-
     const getBreadcrumbs = () => {
       return router.currentRoute.value.matched.map((route) => {
         return {
@@ -29,15 +26,12 @@ export default {
         }
       })
     }
-
     router.afterEach(() => {
       breadcrumbs.value = getBreadcrumbs()
     })
-
     onMounted(() => {
       breadcrumbs.value = getBreadcrumbs()
     })
-
     return {
       breadcrumbs,
     }

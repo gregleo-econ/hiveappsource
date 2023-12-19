@@ -1,22 +1,16 @@
 /**
  *  External Modules
  */
-
 import Vue from "vue";
 import { createAuth0Client } from "@auth0/auth0-spa-js";
-
 /**
  *  Vue.js Instance Definition
  */
-
 let instance;
-
 export const getInstance = () => instance;
-
 /**
  *  Vue.js Instance Initialization
  */
-
 export const useAuth0 = ({
   onRedirectCallback = () =>
     window.history.replaceState({}, document.title, window.location.pathname),
@@ -24,7 +18,6 @@ export const useAuth0 = ({
   ...pluginOptions
 }) => {
   if (instance) return instance;
-
   instance = new Vue({
     data() {
       return {
@@ -39,16 +32,13 @@ export const useAuth0 = ({
       loginWithRedirect(options) {
         return this.auth0Client.loginWithRedirect(options);
       },
-
       logout(options) {
         return this.auth0Client.logout(options);
       },
-
       getAccessTokenSilently(o) {
         return this.auth0Client.getTokenSilently(o);
       },
     },
-
     async created() {
       this.auth0Client = await createAuth0Client({
         ...pluginOptions,
@@ -59,16 +49,13 @@ export const useAuth0 = ({
           redirect_uri: redirectUri,
         },
       });
-
       try {
         const search = window.location.search;
-
         if (
           (search.includes("code=") || search.includes("error=")) &&
           search.includes("state=")
         ) {
           const { appState } = await this.auth0Client.handleRedirectCallback();
-
           onRedirectCallback(appState);
         }
       } catch (error) {
@@ -80,14 +67,11 @@ export const useAuth0 = ({
       }
     },
   });
-
   return instance;
 };
-
 /**
  *  Vue.js Plugin Definition
  */
-
 export const Auth0Plugin = {
   install(Vue, options) {
     Vue.prototype.$auth0 = useAuth0(options);

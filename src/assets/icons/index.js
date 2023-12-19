@@ -78,7 +78,6 @@ import {
   cilUserFollow,
   cilXCircle,
 } from '@coreui/icons'
-
 export const iconsSet = Object.assign(
   {},
   {

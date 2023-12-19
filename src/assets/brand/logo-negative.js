@@ -146,6 +146,5 @@ export const logoNegative = [
    </g>
  </g>
 </svg>
-
 `,
 ]

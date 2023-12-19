@@ -1,6 +1,5 @@
 <template>
     <CRow>
-
         <CCol :sm="3">
             <CWidgetStatsF color="dark" title="Balance" :value="balance">
                 <template #icon>
@@ -8,16 +7,14 @@
                 </template>
             </CWidgetStatsF>
             <BR />
-            <CCard>                
+            <CCard>
                 <CCardBody>
                     <CCardTitle>Add Funds</CCardTitle>
                     <CCardText>Enter Amount</CCardText>
                     <CForm>
                         <CInputGroup class="mb-3">
-
                             <CInputGroupText>$</CInputGroupText>
                             <CFormInput type="numeric" v-model="amount" />
-
                         </CInputGroup>
                     </CForm>
                     <BR />
@@ -29,61 +26,45 @@
         </CCol>
         <CCol :sm="9">
             <CCard>
-                
                 <CCardBody>
                     <CCardTitle>Transactions</CCardTitle>
-                    <CTable align="middle" class="mb-0 border" hover responsive>
-                        <CTableHead color="light">
-                            <CTableRow>
-                                <CTableHeaderCell class="text-center">Date</CTableHeaderCell>
-                                <CTableHeaderCell class="text-center">Amount</CTableHeaderCell>
-                                <CTableHeaderCell class="text-center">Source</CTableHeaderCell>
-                                <CTableHeaderCell class="text-center">Experiment</CTableHeaderCell>
-                                <CTableHeaderCell class="text-center">Participant #</CTableHeaderCell>
-                            </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                            <CTableRow v-for="item in items" :key="item.date">
-                                <CTableDataCell class="text-center">{{
-                                    format_date(item.date * 1000)
-                                }}</CTableDataCell>
-                                <CTableDataCell v-if="item.amount > 0" class="text-center"><span
-                                        class="text-success">${{ item.amount }}</span></CTableDataCell>
-                                <CTableDataCell v-else class="text-center"><span
-                                        class="text-danger">-${{ Math.abs(item.amount) }}</span></CTableDataCell>
-                                <CTableDataCell class="text-center">{{ item.source }}</CTableDataCell>
-                                <CTableDataCell v-if="item.amount < 0" class="text-center">{{ item.experiment }}
-                                </CTableDataCell>
-                                <CTableDataCell v-else class="text-center"></CTableDataCell>
-                                <CTableDataCell v-if="item.amount < 0" class="text-center">{{
-                                    item.participant_number }}
-                                </CTableDataCell>
-                                <CTableDataCell v-else class="text-center"></CTableDataCell>
-                            </CTableRow>
-                            <CTableRow> </CTableRow>
-                        </CTableBody>
-                    </CTable>
-
+                    <div style="width:200px; margin-bottom:5px;">
+                        <span>Search Field:</span>
+                        <CFormSelect v-model="searchField">
+                            <option value="session_id">Session Id #</option>
+                            <option value="participant_id">Participant Id #</option>
+                        </CFormSelect>
+                    </div>
+                    <div style="width:200px; margin-bottom:10px;">
+                        <span>Search Value: </span>
+                        <input type="text" v-model="searchValue">
+                    </div>
+                    <EasyDataTable v-if="showLoading == false" alternating header-class-name="customize-table-header"
+                        header-item-class-name="customize-table-header-item" table-class-name="customize-table"
+                        header-text-direction="center" body-text-direction="center" :headers="headers" :items="items"
+                        :search-field="searchField" :search-value="searchValue">
+                        <template #item-amount="item">
+                            <span v-if="item.amount > 0" class="text-center text-success">${{
+                                item.amount }}</span>
+                            <span v-else class="text-center text-danger">-${{
+                                Math.abs(item.amount) }}</span>
+                        </template>
+                        <template #item-date="item">
+                            {{ format_date(item.date * 1000) }}
+                        </template>
+                    </EasyDataTable>
                 </CCardBody>
             </CCard>
             <loadingAnimation v-if="showLoading"></loadingAnimation>
         </CCol>
-
-
     </CRow>
 </template>
-
-
 <script setup>
-
-import axios from 'axios'
 import { ref } from 'vue'
-import { useStore } from 'vuex'
 import { CIcon } from '@coreui/icons-vue';
 import { loadScript } from '@paypal/paypal-js';
-import { CCardText } from '@coreui/vue';
-
-const store = useStore()
+import { CCardText, CFormSelect } from '@coreui/vue';
+import * as DataFunctions from '@/services/GetData.js'
 const items = ref({})
 const balance = ref(0)
 const show_add_funds = ref(false)
@@ -91,12 +72,23 @@ const amount = ref(100)
 const paid = ref(false);
 const CLIENT_ID = 'test';
 const showLoading = ref(true)
+const searchField = ref("session_id");
+const searchValue = ref();
+
+
+const headers = [
+    { text: "Date", value: "date", sortable: true },
+    { text: "Amount", value: "amount", sortable: true },
+    { text: "Source", value: "source", sortable: true },
+    { text: "Session Id", value: "session_id", sortable: true },
+    { text: "Participant Id", value: "participant_id", sortable: true },
+]
+
 
 
 loadScript({ "client-id": CLIENT_ID }).then((paypal) => {
     paypal.Buttons({
         createOrder: function (data, actions) {
-            // This function sets up the details of the transaction, including the amount and line item details.
             return actions.order.create({
                 purchase_units: [{
                     amount: {
@@ -109,41 +101,25 @@ loadScript({ "client-id": CLIENT_ID }).then((paypal) => {
             // This function captures the funds from the transaction.
             return actions.order.capture().then(function (details) {
                 // This function shows a transaction success message to your buyer.
-                console.log(details)
-                alert('Transaction completed for $' + details.purchase_units[0].amount.value)
-                axios
-                    .post('http://econhive.com/api/researcher/new_payment?researcher_email=' + store.state.user.email + '&amount=' + details.purchase_units[0].amount.value + '&source=paypal')
+                DataFunctions.ResearcherNewPayment(details.purchase_units[0].amount.value)
                     .then(res => {
-                        axios
-                            .get(
-                                'http://econhive.com/api/users/get_funds?my_email=' +
-                                store.state.user.email,
-                            )
+                        DataFunctions.UsersGetFunds()
                             .then((res) => {
                                 balance.value = "$" + res.data[0]
                             });
-                        axios
-                            .get(
-                                'http://econhive.com/api/users/get_funds_detail?my_email=' +
-                                store.state.user.email,
-                            )
+                        DataFunctions.UsersGetFundsDetail()
                             .then((res) => {
-                                items.value = res.data
 
+                                items.value = res.data
                             });
                         show_add_funds.value = false;
                     })
+                alert('Transaction completed for $' + details.purchase_units[0].amount.value)
             });
         }
     }).render('#paypal-button-container');
 })
-
-
-axios
-    .get(
-        'http://econhive.com/api/users/get_funds?my_email=' +
-        store.state.user.email,
-    )
+DataFunctions.UsersGetFunds()
     .then((res) => {
         balance.value = "$" + res.data[0]
     })
@@ -157,27 +133,14 @@ const format_date = function (date_string) {
     })
 }
 
-
-axios
-    .get(
-        'http://econhive.com/api/users/get_funds_detail?my_email=' +
-        store.state.user.email,
-    )
+DataFunctions.UsersGetFundsDetail()
     .then((res) => {
         items.value = res.data
         showLoading.value = false
-
     })
-
-const add_funds = function () {
-    show_add_funds.value = true;
-
-}
 
 
 </script>
-
-
 
 <style>
 #paypal-button-container {
@@ -192,7 +155,6 @@ const add_funds = function () {
 }
 
 .paypal-button {
-
     max-width: 10px !important;
     max-height: 50px;
 }

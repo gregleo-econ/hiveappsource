@@ -1,1 +1,27 @@
 // Here you can add other styles
+.customize-table {
+    --easy-table-border:	2px solid black;
+    --easy-table-row-border: 2px solid black;
+    --da0d4328: 100px !important;
+    --easy-table-message-font-size: 24px;
+    --easy-table-header-font-color: black;
+    --easy-table-header-background-color: #ebedef;
+    --easy-table-header-font-size: var(--cui-body-font-size);
+    --easy-table-body-row-font-size: var(--cui-body-font-size);
+    --easy-table-body-item-padding: 10px 10px;
+    
+  }
+
+ .vue3-easy-data-table__header th .header .header-text{
+    
+    background-color:  #ebedef;
+    color: black;
+    
+}
+
+.vue3-easy-data-table__header th .header {
+    
+    background-color:  #ebedef;
+    color: black;
+    
+}
